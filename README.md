@@ -1,4 +1,4 @@
-This is my keyboard backlight script. This turns the keyboard backlights up/down. This was coded with my current window manager in mind, AwesomeWM. Simple bind the hotkeys to this script.
+This is my keyboard backlight script. This turns the keyboard backlights up/down. This was coded with my current window manager in mind, AwesomeWM. Simply bind the hotkeys to this script.
 
 Invocation
 ---------------
