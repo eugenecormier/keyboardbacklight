@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+
+#################################################################
+#           Keyboard backlight changer
+#              Coded by Eugene Cormier
+#               June 2017
+#
+#   your backlight in /sys/class must be writable
+#   by your user
+#################################################################
+
+
+
+# imports
+import os,sys,subprocess
+
+# variables
+interface='/sys/class/leds/asus::kbd_backlight/brightness'
+steps=3
+maxvalue=3
+
+
+config = [interface,steps,maxvalue]
+
+# read config in from file
+def readvalue(config):
+    f = open(config[0])
+    value = f.readline().rstrip()
+    return value
+
+def adjustmentamount(config):
+    value = config[2] / config[1]
+    return value
+
+
+def argparse(config,currentvalue,change):
+    if len(sys.argv) == 2:
+        # turn brightness up
+        if sys.argv[1] == '+':
+            if int(currentvalue) < maxvalue - int(change):
+                newvalue = int(currentvalue) + int(change)
+                subprocess.call('echo ' + str(newvalue) + ' > ' + config[0], shell = True)
+            else:
+                subprocess.call('echo ' + str(config[2]) + ' > ' + config[0], shell = True)
+        # turn brightness down
+        elif sys.argv[1] == '-':
+            if int(currentvalue) > int(change):
+                newvalue = int(currentvalue) - int(change)
+                subprocess.call('echo ' + str(newvalue) + ' > ' + config[0], shell = True)
+            else:
+                subprocess.call('echo 0 > ' + config[0], shell = True)
+        # bad argument
+        else:
+            print(sys.argv[1] + ' is not a valid argument')
+    # no argument given
+    else:
+        print('no argument')
+
+def main(config):
+    currentvalue = readvalue(config)
+    change = adjustmentamount(config)
+    argparse(config,currentvalue,change)
+
+main(config)
